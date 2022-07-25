@@ -1,12 +1,12 @@
 /* 
 Complete the following table when you submit this file:
 
-Surname     | Firstname | email | Contribution% | Any issues?
-=============================================================
-Person 1... |           |       | 25%           |
-Person 2... |           |       | 25%           |
-Person 3... |           |       | 25%           |
-Person 4... |           |       | 25%           |
+Surname     | Firstname | email                       | Contribution% | Any issues?
+===================================================================================
+Lee         | Kai Yi    | klee0102@student.monash.edu | 25%           |
+Low         | Gabriel   | glow0007@student.monash.edu | 25%           |
+Lee         | Jun Kang  | jlee0221@student.monash.edu | 25%           |
+Khor        | Kai Wen   | kkho0019@student.monash.edu | 25%           |
 
 complete Worksheet 1 by entering code in the places marked below...
 
