@@ -50,8 +50,8 @@ function aFunction() {
 function projectEulerProblem1() {
     let sum = 0;
     let number = 1;
-    while(number < 1000) {
-        if(number % 3 === 0 || number % 5 === 0) {
+    while (number < 1000) {
+        if (number % 3 === 0 || number % 5 === 0) {
             sum += number;
         }
         number += 1;
@@ -116,9 +116,7 @@ function projectEulerProblem1UsingImperativeSummer() {
     Hint: use recursion!
 */
 function immutableSummer(f, n) {
-    if(n < 1) {
-        return n;
-    }
+    if(n < 1) return n;
     return (f(n-1) ? n-1 : 0) + immutableSummer(f, n-1);
 }
 
