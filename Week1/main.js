@@ -116,7 +116,7 @@ function projectEulerProblem1UsingImperativeSummer() {
     Hint: use recursion!
 */
 function immutableSummer(f, n) {
-    if(n < 1) return n;
+    if (n < 1) return n; 
     return (f(n-1) ? n-1 : 0) + immutableSummer(f, n-1);
 }
 
