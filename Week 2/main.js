@@ -47,7 +47,38 @@
 /**
  * Exercise 9
  */
+ function factorial(n) {
+    return n * (n === 1 ? 1 : factorial(n-1));
+}
+
+function calculateETerm(n) {
+    return (2*(n + 1) / factorial(2*n + 1));
+}
+
+function sumAccumulate(m, n) {
+    return m + n;
+}
+
+function alwaysTrue() {
+    return true;
+}
+
+const sum_series_calculator = (transform) => (n) => {
+
+}
+
+function calculateE(n) {
+
+}
+
 
 /**
  * Exercise 10
  */
+ function calculateNTerm(n) {
+    return (((-1^n)*x^(2*n + 1))/factorial(2*n + 1));
+}
+
+function sin(x) {
+    
+}
