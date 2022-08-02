@@ -3,7 +3,7 @@
 // Low         |  Gabriel  | 25%
 // Lee         |  Jun Kang | 25%
 // Lee         |  Kai Yi   | 25%
-// Person 4..  |           | 25%
+// Khor        |  Kai Wen  | 25%
 //
 // complete Worksheet 2 by entering code in the places marked below...
 //
@@ -33,6 +33,12 @@ const callEach = array => array.forEach(f => f());
 /**
  * Exercise 4
  */
+// map
+const addN = (n, array) => array.map(x => operationOnTwoNumbers((y,z) => y+z)(x)(n));
+// filter
+const getEvens = array => array.filter(n => (n % 2 == 0));
+// reduce
+const multiplyArray = array => array.reduce((prod, n) => prod *= (n ? n : 1));
 
 /**
  * Exercise 5
