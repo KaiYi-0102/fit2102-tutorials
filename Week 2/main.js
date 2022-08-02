@@ -20,25 +20,34 @@
     aProperty: "group1",
     anotherProperty: 1
 }
+ 
+ 
 /**
  * Exercise 2
  * JK
  */
 const operationOnTwoNumbers = f => x => y => f(x,y);
+
+
 /**
  * Exercise 3
  * JK
  */
 const callEach = array => array.forEach(f => f());
+
+
 /**
  * Exercise 4
  */
 // map
 const addN = (n, array) => array.map(x => operationOnTwoNumbers((y,z) => y+z)(x)(n));
+
 // filter
 const getEvens = array => array.filter(n => (n % 2 == 0));
+
 // reduce
 const multiplyArray = array => array.reduce((prod, n) => prod *= (n ? n : 1));
+
 
 /**
  * Exercise 5
@@ -46,16 +55,19 @@ const multiplyArray = array => array.reduce((prod, n) => prod *= (n ? n : 1));
 function range(n){
     return n?range(n-1).concat(n-1):[]     
 }
+
+
 /**
  * Exercise 6
  */
+const Euler1 = _ => range(1000).filter(n => n % 3 === 0 || n % 5 === 0).reduce((sum, n) => sum += n, 0);
+
 
 /**
  * Exercise 7
  * Kai Yi
  */
 const infinite_series_calculator = (accumulate) => (predicate) => (transform) => n => {
-
     
     const newRange = range(n) // create a list of number from 0 to n-1
 
