@@ -16,7 +16,7 @@
  * Exercise 1
  * JK 
  */
- const myObj={
+ const myObj = {
     aProperty: "group1",
     anotherProperty: 1
 }
@@ -67,7 +67,7 @@ const Euler1 = _ => range(1000).filter(n => n % 3 === 0 || n % 5 === 0).reduce((
  * Exercise 7
  * Kai Yi
  */
-const infinite_series_calculator = (accumulate) => (predicate) => (transform) => n => {
+const infinite_series_calculator = (accumulate) => (predicate) => (transform) => (n) => {
     
     const newRange = range(n) // create a list of number from 0 to n-1
 
@@ -113,38 +113,26 @@ const pi = calculatePi(100);
 /**
  * Exercise 9
  */
- function factorial(n) {
-    return n * (n === 1 ? 1 : factorial(n-1));
-}
+const factorial = (n) => n * (n === 1 ? 1 : factorial(n-1));
 
-function calculateETerm(n) {
-    return (2*(n + 1) / factorial(2*n + 1));
-}
+const calculateETerm = (n) => 2*(n + 1) / factorial(2*n + 1);
 
-function sumAccumulate(m, n) {
-    return m + n;
-}
+const sumAccumulate = (m, n) => m + n;
 
-function alwaysTrue() {
-    return true;
-}
+const alwaysTrue = () => true;
 
-const sum_series_calculator = (transform) => (n) => {
+const sum_series_calculator = (transform) => (n) => infinite_series_calculator(sumAccumulate)(alwaysTrue)(transform)(n);
 
-}
+const calculateE = (n) => sum_series_calculator(calculateETerm)(n);
 
-function calculateE(n) {
-
-}
+const e = calculateE(3);
 
 
 /**
  * Exercise 10
  */
- function calculateNTerm(n) {
-    return (((-1^n)*x^(2*n + 1))/factorial(2*n + 1));
-}
+const calculateXTerm = (n) => (x) => (-1^n)*x^(2*n + 1) / factorial(2*n + 1);
 
-function sin(x) {
-    
-}
+const calculateX = (n) => sum_series_calculator(calculateXTerm)(n);
+
+const sin = (x) => calculateX(x);
