@@ -86,27 +86,17 @@ const infinite_series_calculator = (accumulate) => (predicate) => (transform) =>
  * Exercise 8
  * Kai Yi
  */
- function calculatePiTerm(n){
-    //this function will calculate the nth term of the pi approximation series 
-    return n ? (4*(n**2) / (4*(n**2) -1)) : 2;
-}
+const calculatePiTerm = n => n ? (4*(n**2) / (4*(n**2) -1)) : 2;
 
-function skipZero(number){
-    //this function will return true for any number except 0
-    return number ? true : false;
-}
+//this function will return true for any number except 0
+const skipZero = number => number ? true : false;
 
-function productAccumulate(number1, number2){
-    //this function will return the product of 2 number
-    return number1 ? number1*number2 : number2;
-}
+//this function will return the product of 2 number
+const productAccumulate = (number1, number2) => number1 ? number1*number2 : number2;
 
-function calculatePi(n){
-    //This function will calculate the approximation of pi using the given pi infinity series
-    return 2*infinite_series_calculator(productAccumulate)(skipZero)(calculatePiTerm)(n);
-}
+//This function will calculate the approximation of pi using the given pi infinity series
+const calculatePi = n => 2*infinite_series_calculator(productAccumulate)(skipZero)(calculatePiTerm)(n);
 
-//TODO: find a better solution, simply plug in a number for now because i am very lazy
 const pi = calculatePi(100);
 
 
