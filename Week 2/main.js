@@ -115,7 +115,7 @@ const pi = calculatePi(100);
  */
 const factorial = (n) => n * (n === 1 ? 1 : factorial(n-1));
 
-const calculateETerm = (n) => 2*(n + 1) / factorial(2*n + 1);
+const calculateETerm = (n) => 2*(n + 1) / factorial(2*n+1);
 
 const sumAccumulate = (m, n) => m + n;
 
@@ -131,8 +131,10 @@ const e = calculateE(3);
 /**
  * Exercise 10
  */
-const calculateXTerm = (n) => (x) => (-1^n)*x^(2*n + 1) / factorial(2*n + 1);
+const calculateXTerm = (n, x) => ((-1)**n)*(x**(2*n+1)) / factorial(2*n+1);
 
-const calculateX = (n) => sum_series_calculator(calculateXTerm)(n);
+const calculateX = (n) => (x) => sum_series_calculator(n => calculateXTerm(n, x))(n);
 
-const sin = (x) => calculateX(x);
+const n = calculateX(3)
+
+const sin = (x) => n(x);
