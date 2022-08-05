@@ -52,9 +52,7 @@ const multiplyArray = array => array.reduce((prod, n) => prod *= (n ? n : 1));
 /**
  * Exercise 5
  */
-function range(n){
-    return n?range(n-1).concat(n-1):[]     
-}
+const range = n => n?range(n-1).concat(n-1):[] 
 
 
 /**
@@ -67,19 +65,9 @@ const Euler1 = _ => range(1000).filter(n => n % 3 === 0 || n % 5 === 0).reduce((
  * Exercise 7
  * Kai Yi
  */
-const infinite_series_calculator = (accumulate) => (predicate) => (transform) => (n) => {
-    
-    const newRange = range(n) // create a list of number from 0 to n-1
+const infinite_series_calculator = (accumulate) => 
+(predicate) => (transform) => (n) => range(n).filter(predicate).map(transform).reduce(accumulate,0)
 
-    //filter first
-    const filteredRange = newRange.filter(predicate)
-
-    //transform
-    const transformedRange = filteredRange.map(transform)
-    
-    //accumulate the result by sum of product
-    return transformedRange.reduce(accumulate, 0)
-}
 
 
 /**
