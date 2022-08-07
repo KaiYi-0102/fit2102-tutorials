@@ -65,9 +65,7 @@ const Euler1 = _ => range(1000).filter(n => n % 3 === 0 || n % 5 === 0).reduce((
  * Exercise 7
  * Kai Yi
  */
-const infinite_series_calculator = (accumulate) => 
-(predicate) => (transform) => (n) => range(n).filter(predicate).map(transform).reduce(accumulate,0)
-
+const infinite_series_calculator = (accumulate) => (predicate) => (transform) => (n) => range(n).filter(predicate).map(transform).reduce(accumulate,0)
 
 
 /**
