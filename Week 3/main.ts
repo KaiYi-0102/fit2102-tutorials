@@ -24,10 +24,10 @@ const IMPLEMENT_THIS: any = undefined;
  * Exercise 1
  */
 
-function addStuff(a, b) {
+function addStuff(a: number, b: number) {
   return a + b;
 }
-function numberToString(input) {
+function numberToString(input: number) {
   return JSON.stringify(input);
 }
 
@@ -36,7 +36,7 @@ function numberToString(input) {
  * If 'padding' is a string, then 'padding' is appended to the left side.
  * If 'padding' is a number, then that number of spaces is added to the left side.
  */
-function padLeft(value: string, padding) {
+function padLeft(value: string, padding: string | number) {
   if (typeof padding === "number") {
     return Array(padding + 1).join(" ") + value;
   }
@@ -49,9 +49,9 @@ function padLeft(value: string, padding) {
 padLeft("Hello world", 4); // returns "    Hello world"
 
 // What's the type of arg0 and arg1?
-function curry(f) {
-  return function (x) {
-    return function (y) {
+function curry(f:(x: number, y: number) => number) {
+  return function (x: number) {
+    return function (y: number) {
       return f(x, y);
     };
   };
