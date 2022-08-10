@@ -115,8 +115,12 @@ function forEach<T>(f: (_: T) => void, list: ConsList<T>): void {
 }
 
 /**
- * Implement this function! Also, complete this documentation (see forEach).
+ * Traverses the ConsList using recursion and calling map on every traverse
+ * element until it reaches a null which stands for the end of the Conslist.
+ * @param f Function to use for each element
+ * @param l Cons list
  */
+// const map = (f, list)=> !list ? null : cons(f(head(list)), map(f, rest(list)))
 function map<T, V>(f: (_: T) => V, l: ConsList<T>): ConsList<V> {
   return !l ? null : cons<V>(f(head(l)), map(f, rest(l)));
 }
@@ -124,6 +128,38 @@ function map<T, V>(f: (_: T) => V, l: ConsList<T>): ConsList<V> {
 /*****************************************************************
  * Exercise 3
  */
+
+// fromArray
+// --- construct a cons list from an array
+function fromArray<T>(arr: T[]): ConsList<T> {
+  return arr.length ? cons<T>(arr[0], fromArray(arr.slice(1))) : null;
+}
+// reduce
+// --- similar to javascript’s Array.reduce
+function reduce<T,V>(f: (x: V, y: T) => V, initVal: V, l: ConsList<T>): V {
+  return l ? reduce(f, f(initVal, head(l)), rest(l)) : initVal;
+}
+// reduceRight
+// --- executes a reducer function f for each value of an array, from right to left
+function reduceRight<T,V>(f: (x: V, y: T) => V, initval: V, l: ConsList<T>): V {
+  return l ? f(reduceRight(f, initval, rest(l)), head(l)) : initval;
+}
+// filter
+// --- takes a function and a cons list, and returns another cons list populated 
+//     only with those elements of the list for which the function returns true
+function filter<T>(f: (x: T) => boolean, l: ConsList<T>): ConsList<T> {
+  return l ? (f(head(l)) ? cons<T>(head(l), filter(f, rest(l))) : filter(f, rest(l))) : null;
+}
+// concat
+// --- takes two lists as arguments and returns a new list of their concatenation
+function concat<T>(list1: ConsList<T>, list2?: ConsList<T>): ConsList<T> {
+  return list1 ? cons(head(list1), concat(rest(list1), list2)) : list2 ? concat(list2) : null;
+}
+// reverse
+// --- 
+function reverse<T>(l: ConsList<T>) : ConsList<T> {
+  return l ? concat(reverse(rest(l)), cons(head(l), null)) : null;
+}
 
 // Example use of reduce
 function countLetters(stringArray: string[]): number {
