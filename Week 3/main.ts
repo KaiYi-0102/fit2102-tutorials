@@ -192,6 +192,21 @@ const myTree = new BinaryTreeNode(
   new BinaryTreeNode(4)
 );
 
+
+//Lee Kai Yi
+//This function will take a layout and increase the indent of all lines by the given indent. 
+//once the forEach function is done i will update this again, for now the test will not pass.
+
+const nest = (indent: number, layout: List<[number, string]>): List<[number, string]> => {
+  return layout.forEach(x => updateFunction(indent,x))
+}
+
+
+const updateFunction = (i : number ,x : [number, string]): [number, string] => {
+  x[0] += i
+  return x
+}
+
 // *** uncomment the following code once you have implemented List and nest function (above) ***
 
 // function prettyPrintBinaryTree<T>(node: BinaryTree<T>): List<[number, string]> {
