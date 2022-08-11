@@ -209,11 +209,9 @@ class List<T> {
     return new List(map(f, this.head));
   }
 
-  // TODO: make this fluent programming
   forEach(f: (_:T) => void): List<T> {
-    const a = new List(this.head);
-    forEach(f, a.head);
-    return a;
+    forEach(f, this.head);
+    return new List(this.head);
   }
 
   filter(f: (_:T) => boolean): List<T> {

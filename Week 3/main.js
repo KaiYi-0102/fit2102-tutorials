@@ -166,11 +166,9 @@ class List {
     map(f) {
         return new List(map(f, this.head));
     }
-    // TODO: make this fluent programming
     forEach(f) {
-        const a = new List(this.head);
-        forEach(f, a.head);
-        return a;
+        forEach(f, this.head);
+        return new List(this.head);
     }
     filter(f) {
         return new List(filter(f, this.head));
