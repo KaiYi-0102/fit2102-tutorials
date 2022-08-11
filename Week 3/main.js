@@ -86,20 +86,54 @@ function forEach(f, list) {
     }
 }
 /**
- * Implement this function! Also, complete this documentation (see forEach).
+ * Traverses the ConsList using recursion and calling map on every traverse
+ * element until it reaches a null which stands for the end of the Conslist.
+ * @param f Function to use for each element
+ * @param l Cons list
  */
+// const map = (f, list)=> !list ? null : cons(f(head(list)), map(f, rest(list)))
 function map(f, l) {
-    return IMPLEMENT_THIS;
+    return !l ? null : cons(f(head(l)), map(f, rest(l)));
 }
 /*****************************************************************
  * Exercise 3
  */
+// fromArray
+// --- construct a cons list from an array
+function fromArray(arr) {
+    return arr.length ? cons(arr[0], fromArray(arr.slice(1))) : null;
+}
+// reduce
+// --- similar to javascript’s Array.reduce
+function reduce(f, initVal, l) {
+    return l ? reduce(f, f(initVal, head(l)), rest(l)) : initVal;
+}
+// reduceRight
+// --- executes a reducer function f for each value of an array, from right to left
+function reduceRight(f, initval, l) {
+    return l ? f(reduceRight(f, initval, rest(l)), head(l)) : initval;
+}
+// filter
+// --- takes a function and a cons list, and returns another cons list populated 
+//     only with those elements of the list for which the function returns true
+function filter(f, l) {
+    return l ? (f(head(l)) ? cons(head(l), filter(f, rest(l))) : filter(f, rest(l))) : null;
+}
+// concat
+// --- takes two lists as arguments and returns a new list of their concatenation
+function concat(list1, list2) {
+    return list1 ? cons(head(list1), concat(rest(list1), list2)) : list2 ? concat(list2) : null;
+}
+// reverse
+// --- 
+function reverse(l) {
+    return l ? concat(reverse(rest(l)), cons(head(l), null)) : null;
+}
 // Example use of reduce
 function countLetters(stringArray) {
     const list = fromArray(stringArray);
     return reduce((len, s) => len + s.length, 0, list);
 }
-console.log(countLetters(["Hello", "there!"]));
 /*****************************************************************
  * Exercise 4
  *
@@ -111,7 +145,7 @@ console.log(countLetters(["Hello", "there!"]));
 class List {
     constructor(list) {
         if (list instanceof Array) {
-            // IMPLEMENT THIS. What goes here ??
+            this.head = fromArray(list);
         }
         else {
             // nullish coalescing operator
@@ -128,6 +162,25 @@ class List {
         // in Exercise 3 is correct!
         return reduce((a, t) => [...a, t], [], this.head);
     }
+    // Add methods here:
+    map(f) {
+        return new List(map(f, this.head));
+    }
+    // TODO: make this fluent programming
+    forEach(f) {
+        const a = new List(this.head);
+        forEach(f, a.head);
+        return a;
+    }
+    filter(f) {
+        return new List(filter(f, this.head));
+    }
+    reduce(f, initialValue) {
+        return reduce(f, initialValue, this.head);
+    }
+    concat(other) {
+        return new List(concat(this.head, other.head));
+    }
 }
 class BinaryTreeNode {
     constructor(data, leftChild, rightChild) {
@@ -138,6 +191,17 @@ class BinaryTreeNode {
 }
 // example tree:
 const myTree = new BinaryTreeNode(1, new BinaryTreeNode(2, new BinaryTreeNode(3)), new BinaryTreeNode(4));
+//Lee Kai Yi
+//This function will take a layout and increase the indent of all lines by the given indent. 
+//once the forEach function is done i will update this again, for now the test will not pass.
+const nest = (indent, layout) => {
+    const addIndent = updateFunction(indent);
+    return layout.forEach(addIndent);
+};
+const updateFunction = i => x => {
+    x[0] += i;
+    return x;
+};
 // *** uncomment the following code once you have implemented List and nest function (above) ***
 // function prettyPrintBinaryTree<T>(node: BinaryTree<T>): List<[number, string]> {
 //     if (!node) {

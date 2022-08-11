@@ -134,27 +134,32 @@ function map<T, V>(f: (_: T) => V, l: ConsList<T>): ConsList<V> {
 function fromArray<T>(arr: T[]): ConsList<T> {
   return arr.length ? cons<T>(arr[0], fromArray(arr.slice(1))) : null;
 }
+
 // reduce
 // --- similar to javascript’s Array.reduce
 function reduce<T,V>(f: (x: V, y: T) => V, initVal: V, l: ConsList<T>): V {
   return l ? reduce(f, f(initVal, head(l)), rest(l)) : initVal;
 }
+
 // reduceRight
 // --- executes a reducer function f for each value of an array, from right to left
 function reduceRight<T,V>(f: (x: V, y: T) => V, initval: V, l: ConsList<T>): V {
   return l ? f(reduceRight(f, initval, rest(l)), head(l)) : initval;
 }
+
 // filter
 // --- takes a function and a cons list, and returns another cons list populated 
 //     only with those elements of the list for which the function returns true
 function filter<T>(f: (x: T) => boolean, l: ConsList<T>): ConsList<T> {
   return l ? (f(head(l)) ? cons<T>(head(l), filter(f, rest(l))) : filter(f, rest(l))) : null;
 }
+
 // concat
 // --- takes two lists as arguments and returns a new list of their concatenation
 function concat<T>(list1: ConsList<T>, list2?: ConsList<T>): ConsList<T> {
   return list1 ? cons(head(list1), concat(rest(list1), list2)) : list2 ? concat(list2) : null;
 }
+
 // reverse
 // --- 
 function reverse<T>(l: ConsList<T>) : ConsList<T> {
@@ -166,7 +171,7 @@ function countLetters(stringArray: string[]): number {
   const list = fromArray(stringArray);
   return reduce((len: number, s: string) => len + s.length, 0, list);
 }
-console.log(countLetters(["Hello", "there!"]));
+
 
 /*****************************************************************
  * Exercise 4
@@ -179,10 +184,9 @@ console.log(countLetters(["Hello", "there!"]));
  */
 class List<T> {
   private readonly head: ConsList<T>;
-
   constructor(list: T[] | ConsList<T>) {
     if (list instanceof Array) {
-      // IMPLEMENT THIS. What goes here ??
+      this.head = fromArray(list);
     } else {
       // nullish coalescing operator
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator
@@ -201,6 +205,28 @@ class List<T> {
   }
 
   // Add methods here:
+  map<V>(f: (_:T) => V): List<V> {
+    return new List(map(f, this.head));
+  }
+
+  // TODO: make this fluent programming
+  forEach(f: (_:T) => void): List<T> {
+    const a = new List(this.head);
+    forEach(f, a.head);
+    return a;
+  }
+
+  filter(f: (_:T) => boolean): List<T> {
+    return new List(filter(f, this.head));
+  }
+
+  reduce<V>(f: (accumulator:V, t:T) => V, initialValue: V): V {
+    return reduce(f, initialValue, this.head);
+  }
+
+  concat(other: List<T>): List<T> {
+    return new List(concat(this.head, other.head));
+  }
 }
 
 /*****************************************************************
