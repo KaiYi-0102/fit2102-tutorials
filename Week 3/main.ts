@@ -229,9 +229,18 @@ class List<T> {
   }
 }
 
+
 /*****************************************************************
  * Exercise 5
  */
+function line(text: string): [number, string] {
+  return [0, text];
+}
+
+function lineToList(line: [number, string]): List<[number, string]> {
+  return new List([line]);
+}
+
 
 /*****************************************************************
  * Exercise 6

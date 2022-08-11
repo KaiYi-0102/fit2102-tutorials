@@ -182,6 +182,15 @@ class List {
         return new List(concat(this.head, other.head));
     }
 }
+/*****************************************************************
+ * Exercise 5
+ */
+function line(text) {
+    return [0, text];
+}
+function lineToList(line) {
+    return new List([line]);
+}
 class BinaryTreeNode {
     constructor(data, leftChild, rightChild) {
         this.data = data;
