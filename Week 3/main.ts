@@ -234,11 +234,12 @@ const myTree = new BinaryTreeNode(
 //once the forEach function is done i will update this again, for now the test will not pass.
 
 const nest = (indent: number, layout: List<[number, string]>): List<[number, string]> => {
-  return layout.forEach(x => updateFunction(indent,x))
+  const addIndent = updateFunction(indent)
+  return layout.forEach(addIndent)
 }
 
 
-const updateFunction = (i : number ,x : [number, string]): [number, string] => {
+const updateFunction : (i :number) => (x : [number,string]) => [number,string] = i => x => {
   x[0] += i
   return x
 }
