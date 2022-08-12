@@ -1,7 +1,7 @@
 /**
  * Surname     | Firstname | Contribution % | Any issues?
  * =====================================================
- * Person 1... |           | 25%            |
+ * Lee         | Jun Kang  | 25%            |
  * Person 2... |           | 25%            |
  * Person 3... |           | 25%            |
  * Person 4... |           | 25%            |
@@ -315,7 +315,14 @@ const naryTree = new NaryTree(
 
 // Implement: function prettyPrintNaryTree(...)
 function prettyPrintNaryTree<T>(node: NaryTree<T>): List<[number, string]> {
-  return IMPLEMENT_THIS;
+  if(!node){
+      return new List<[number, string]>([])
+  }
+  else{
+      const currentparent = lineToList(line(node.data.toString()))
+      const children = node.children.map(prettyPrintNaryTree)
+      return children.reduce((line, otherChildern) => line.concat(nest(1, otherChildern)), currentparent)
+  }
 }
 
 // *** uncomment the following code once you have implemented prettyPrintNaryTree (above) ***
