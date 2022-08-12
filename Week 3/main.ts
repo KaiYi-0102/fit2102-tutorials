@@ -264,8 +264,6 @@ const myTree = new BinaryTreeNode(
 
 //Lee Kai Yi
 //This function will take a layout and increase the indent of all lines by the given indent. 
-//once the forEach function is done i will update this again, for now the test will not pass.
-
 const nest = (indent: number, layout: List<[number, string]>): List<[number, string]> => {
   const addIndent = updateFunction(indent)
   return layout.forEach(addIndent)
@@ -278,21 +276,20 @@ const updateFunction : (i :number) => (x : [number,string]) => [number,string] =
 }
 
 // *** uncomment the following code once you have implemented List and nest function (above) ***
+function prettyPrintBinaryTree<T>(node: BinaryTree<T>): List<[number, string]> {
+    if (!node) {
+        return new List<[number, string]>([])
+    }
+    const thisLine = lineToList(line(node.data.toString())),
+          leftLines = prettyPrintBinaryTree(node.leftChild),
+          rightLines = prettyPrintBinaryTree(node.rightChild);
+    return thisLine.concat(nest(1, leftLines.concat(rightLines)))
+}
 
-// function prettyPrintBinaryTree<T>(node: BinaryTree<T>): List<[number, string]> {
-//     if (!node) {
-//         return new List<[number, string]>([])
-//     }
-//     const thisLine = lineToList(line(node.data.toString())),
-//           leftLines = prettyPrintBinaryTree(node.leftChild),
-//           rightLines = prettyPrintBinaryTree(node.rightChild);
-//     return thisLine.concat(nest(1, leftLines.concat(rightLines)))
-// }
-
-// const output = prettyPrintBinaryTree(myTree)
-//                     .map(aLine => new Array(aLine[0] + 1).join('-') + aLine[1])
-//                     .reduce((a,b) => a + '\n' + b, '').trim();
-// console.log(output);
+const output = prettyPrintBinaryTree(myTree)
+                    .map(aLine => new Array(aLine[0] + 1).join('-') + aLine[1])
+                    .reduce((a,b) => a + '\n' + b, '').trim();
+console.log(output);
 
 /*****************************************************************
  * Exercise 7: Implement prettyPrintNaryTree, which takes a NaryTree as input
