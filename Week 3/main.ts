@@ -243,7 +243,6 @@ function lineToList(line: [number, string]): List<[number, string]> {
 /*****************************************************************
  * Exercise 6
  */
-
 type BinaryTree<T> = BinaryTreeNode<T> | undefined;
 
 class BinaryTreeNode<T> {
@@ -261,14 +260,11 @@ const myTree = new BinaryTreeNode(
   new BinaryTreeNode(4)
 );
 
-
-//Lee Kai Yi
 //This function will take a layout and increase the indent of all lines by the given indent. 
 const nest = (indent: number, layout: List<[number, string]>): List<[number, string]> => {
   const addIndent = updateFunction(indent)
   return layout.forEach(addIndent)
 }
-
 
 const updateFunction : (i :number) => (x : [number,string]) => [number,string] = i => x => {
   x[0] += i
@@ -290,6 +286,7 @@ const output = prettyPrintBinaryTree(myTree)
                     .map(aLine => new Array(aLine[0] + 1).join('-') + aLine[1])
                     .reduce((a,b) => a + '\n' + b, '').trim();
 console.log(output);
+
 
 /*****************************************************************
  * Exercise 7: Implement prettyPrintNaryTree, which takes a NaryTree as input
@@ -326,11 +323,11 @@ function prettyPrintNaryTree<T>(node: NaryTree<T>): List<[number, string]> {
 }
 
 // *** uncomment the following code once you have implemented prettyPrintNaryTree (above) ***
-//
-// const outputNaryTree = prettyPrintNaryTree(naryTree)
-//                     .map(aLine => new Array(aLine[0] + 1).join('-') + aLine[1])
-//                     .reduce((a,b) => a + '\n' + b, '').trim();
-// console.log(outputNaryTree);
+const outputNaryTree = prettyPrintNaryTree(naryTree)
+                    .map(aLine => new Array(aLine[0] + 1).join('-') + aLine[1])
+                    .reduce((a,b) => a + '\n' + b, '').trim();
+console.log(outputNaryTree);
+
 
 /*****************************************************************
  * Exercise 8 (Supplementary)

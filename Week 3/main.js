@@ -198,7 +198,6 @@ class BinaryTreeNode {
 }
 // example tree:
 const myTree = new BinaryTreeNode(1, new BinaryTreeNode(2, new BinaryTreeNode(3)), new BinaryTreeNode(4));
-//Lee Kai Yi
 //This function will take a layout and increase the indent of all lines by the given indent. 
 const nest = (indent, layout) => {
     const addIndent = updateFunction(indent);
@@ -247,6 +246,11 @@ function prettyPrintNaryTree(node) {
         return children.reduce((line, otherChildern) => line.concat(nest(1, otherChildern)), currentparent);
     }
 }
+// *** uncomment the following code once you have implemented prettyPrintNaryTree (above) ***
+const outputNaryTree = prettyPrintNaryTree(naryTree)
+    .map(aLine => new Array(aLine[0] + 1).join('-') + aLine[1])
+    .reduce((a, b) => a + '\n' + b, '').trim();
+console.log(outputNaryTree);
 const jsonPrettyToDoc = (json) => {
     if (Array.isArray(json)) {
         // Handle the Array case.
