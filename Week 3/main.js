@@ -2,9 +2,9 @@
  * Surname     | Firstname | Contribution % | Any issues?
  * =====================================================
  * Lee         | Jun Kang  | 25%            |
- * Person 2... |           | 25%            |
- * Person 3... |           | 25%            |
- * Person 4... |           | 25%            |
+ * Lee         | Kai Yi    | 25%            |
+ * Khor        | Kai Wen   | 25%            |
+ * Low         | Gabriel   | 25%            |
  *
  * Please do not hesitate to contact your tutors if there are
  * issues that you cannot resolve within the group.
