@@ -1,10 +1,10 @@
 /**
  * Surname     | Firstname | Contribution % | Any issues?
  * =====================================================
- * Person 1... |           | 25%            |
- * Person 2... |           | 25%            |
- * Person 3... |           | 25%            |
- * Person 4... |           | 25%            |
+ * Lee         | Jun Kang  | 25%            |
+ * Lee         | Kai Yi    | 25%            |
+ * Khor        | Kai Wen   | 25%            |
+ * Low         | Gabriel   | 25%            |
  *
  * Please do not hesitate to contact your tutors if there are
  * issues that you cannot resolve within the group.
@@ -21,17 +21,32 @@
  */
 const IMPLEMENT_THIS = undefined;
 // Implement the function:
+//note, return a function, such that the returned function will return the object of type LazySequence<T>
+//Note that next is a function that will return the _next function but with the transformed value.
 function initSequence(transform) {
-    return IMPLEMENT_THIS;
+    return function _next(value) {
+        return {
+            value: value,
+            next: () => _next(transform(value))
+        };
+    };
 }
 /**
  *  Exercise 2 - map, filter, take, reduce
  */
+//map will returns a new sequence that has undergone the transformation by the input function
 function map(func, seq) {
-    return IMPLEMENT_THIS;
+    return {
+        value: func(seq.value),
+        next: () => map(func, seq.next())
+    };
 }
+//This function will return a new sequence that is filtered by the input function.
 function filter(func, seq) {
-    return IMPLEMENT_THIS;
+    return func(seq.value) ? {
+        value: seq.value,
+        next: () => filter(func, seq.next())
+    } : filter(func, seq.next()); //else, we continue to filter with the next item
 }
 /**
  * Creates a sequence of finite length (terminated by undefined) from a longer or infinite sequence.
@@ -61,10 +76,14 @@ function take(n, seq) {
  * @param start starting value of the reduction past as first parameter to first call of func
  */
 function reduce(func, seq, start) {
-    return IMPLEMENT_THIS;
+    //The ternary function is to check whether we already reach the end of the sequence.
+    //Then the idea is update the start parameter with the aggregation function and continue to recurse with the next sequence value
+    return seq ? reduce(func, seq.next(), func(start, seq.value)) : start;
 }
+//This function will apply the aggregator function from the end of the sequence instead from the start of the sequence.
+//The idea is to recurse all the way to the end of the sequence (reach undefined value), which we will return the start value, and at each call apply the aggregator function to seq[n] and seq[n-1]
 function reduceRight(f, seq, start) {
-    return IMPLEMENT_THIS;
+    return seq ? f(reduceRight(f, seq.next(), start), seq.value) : start;
 }
 /**
  *  Exercise 3 - Reduce Practice

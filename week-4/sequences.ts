@@ -1,10 +1,10 @@
 /**
  * Surname     | Firstname | Contribution % | Any issues?
  * =====================================================
- * Person 1... |           | 25%            |
- * Person 2... |           | 25%            |
- * Person 3... |           | 25%            |
- * Person 4... |           | 25%            |
+ * Lee         | Jun Kang  | 25%            |
+ * Lee         | Kai Yi    | 25%            |
+ * Khor        | Kai Wen   | 25%            |
+ * Low         | Gabriel   | 25%            |
  *
  * Please do not hesitate to contact your tutors if there are
  * issues that you cannot resolve within the group.
@@ -32,25 +32,36 @@ interface LazySequence<T> {
 }
 
 // Implement the function:
-function initSequence<T>(
-  transform: (value: T) => T
-): (initialValue: T) => LazySequence<T> {
-  return IMPLEMENT_THIS;
+
+//note, return a function, such that the returned function will return the object of type LazySequence<T>
+//Note that next is a function that will return the _next function but with the transformed value.
+function initSequence<T>(transform: (value: T) => T): (initialValue: T) => LazySequence<T> {
+  return function _next(value: T): LazySequence<T>{
+    return {
+      value : value,
+      next : () => _next(transform(value))
+    }
+  }
 }
 
 /**
  *  Exercise 2 - map, filter, take, reduce
  */
 
+//map will returns a new sequence that has undergone the transformation by the input function
 function map<T, V>(func: (v: T) => V, seq: LazySequence<T>): LazySequence<V> {
-  return IMPLEMENT_THIS;
+  return {
+    value : func(seq.value),
+    next : () => map<T, V>(func, seq.next())
+  } 
 }
 
-function filter<T>(
-  func: (v: T) => boolean,
-  seq: LazySequence<T>
-): LazySequence<T> {
-  return IMPLEMENT_THIS;
+//This function will return a new sequence that is filtered by the input function.
+function filter<T>(func: (v: T) => boolean, seq: LazySequence<T>): LazySequence<T> {
+  return func(seq.value)? { //does this value pass the filter function? If yes, we keep it.
+    value : seq.value,
+    next : () => filter<T>(func, seq.next())
+  } : filter<T>(func, seq.next()) //else, we continue to filter with the next item
 }
 
 /**
@@ -82,20 +93,16 @@ function take<T>(n: number, seq: LazySequence<T>): LazySequence<T> | undefined {
  * @param seq either a sequence or undefined if we have reached the end of the sequence
  * @param start starting value of the reduction past as first parameter to first call of func
  */
-function reduce<T, V>(
-  func: (_: V, x: T) => V,
-  seq: LazySequence<T> | undefined,
-  start: V
-): V {
-  return IMPLEMENT_THIS;
+function reduce<T, V>(func: (_: V, x: T) => V, seq: LazySequence<T> | undefined, start: V): V {
+  //The ternary function is to check whether we already reach the end of the sequence.
+  //Then the idea is update the start parameter with the aggregation function and continue to recurse with the next sequence value
+  return seq? reduce<T,V>(func, seq.next(), func(start,seq.value)): start
 }
 
-function reduceRight<T, V>(
-  f: (_: V, x: T) => V,
-  seq: LazySequence<T> | undefined,
-  start: V
-): V {
-  return IMPLEMENT_THIS;
+//This function will apply the aggregator function from the end of the sequence instead from the start of the sequence.
+//The idea is to recurse all the way to the end of the sequence (reach undefined value), which we will return the start value, and at each call apply the aggregator function to seq[n] and seq[n-1]
+function reduceRight<T, V>(f: (_: V, x: T) => V, seq: LazySequence<T> | undefined, start: V): V {
+  return seq ? f(reduceRight<T,V>(f, seq.next(), start), seq.value) : start
 }
 
 /**
