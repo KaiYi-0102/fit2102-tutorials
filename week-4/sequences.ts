@@ -96,7 +96,7 @@ function take<T>(n: number, seq: LazySequence<T>): LazySequence<T> | undefined {
 function reduce<T, V>(func: (_: V, x: T) => V, seq: LazySequence<T> | undefined, start: V): V {
   //The ternary function is to check whether we already reach the end of the sequence.
   //Then the idea is update the start parameter with the aggregation function and continue to recurse with the next sequence value
-  return seq? reduce<T,V>(func, seq.next(), func(start,seq.value)): start
+  return seq ? reduce<T,V>(func, seq.next(), func(start,seq.value)): start
 }
 
 //This function will apply the aggregator function from the end of the sequence instead from the start of the sequence.
@@ -115,7 +115,7 @@ function maxNumber(lazyList: LazySequence<number>): number {
   // lazyList passed in. The lazyList
   // will terminate so don't use `take`
   // inside this function body.
-  return reduce((x,y)=>x>y?x:y,lazyList,0);
+  return reduce((x,y)=> x>y ? x : y, lazyList, 0);
 }
 
 function lengthOfSequence(lazyList: LazySequence<any>): number {
@@ -139,5 +139,5 @@ function toArray<T>(seq: LazySequence<T>): T[] {
 function exercise4Solution(seriesLength: number): number {
   // Your solution using lazy lists.
   // Use `take` to only take the right amount of the infinite list.
-  return IMPLEMENT_THIS;
+  return reduce((x,y) => x + 1/y, take(seriesLength, initSequence((x) => x>0 ? -(x+2) : -x+2)(1)), 0);
 }
