@@ -129,7 +129,7 @@ function toArray<T>(seq: LazySequence<T>): T[] {
   // ******** YOUR CODE HERE ********
   // Again only use reduce and don't
   // use `take` inside this function.
-  return reduce((x,y)=>x.concat(y),seq,[]);
+  return reduce<T,T[]>((x,y)=>x.concat(y),seq,[]);
 }
 
 /**
@@ -139,5 +139,5 @@ function toArray<T>(seq: LazySequence<T>): T[] {
 function exercise4Solution(seriesLength: number): number {
   // Your solution using lazy lists.
   // Use `take` to only take the right amount of the infinite list.
-  return reduce((x,y) => x + 1/y, take(seriesLength, initSequence((x) => x>0 ? -(x+2) : -x+2)(1)), 0);
+  return reduce<number,number>((x,y) => x + 1/y, take(seriesLength, initSequence<number>((x) => x>0 ? -(x+2) : -x+2)(1)), 0);
 }
