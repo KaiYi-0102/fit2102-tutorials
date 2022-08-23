@@ -182,7 +182,19 @@ function animatedRectTimer() {
 function animatedRect() {
   // Your code starts here!
   // =========================================================================================
-  // ...
+  const svg = document.getElementById("animatedRect");
+   const rect = document.createElementNS(svg.namespaceURI, 'rect')
+   Object.entries({
+     x: 100,
+     y: 70,
+     width: 120,
+     height: 80,
+     fill: "#95B3D7",
+   }).forEach(([key, val]) => rect.setAttribute(key, String(val)));
+   svg.appendChild(rect);
+ 
+   interval(1).pipe(takeUntil(interval(1000)))
+               .subscribe(() => rect.setAttribute('x', String(1 + Number(rect.getAttribute('x')))))
 }
 
 // Exercise 7
