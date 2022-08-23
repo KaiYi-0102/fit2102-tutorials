@@ -182,7 +182,19 @@ function animatedRectTimer() {
 function animatedRect() {
   // Your code starts here!
   // =========================================================================================
-  // ...
+  const svg = document.getElementById("animatedRect");
+   const rect = document.createElementNS(svg.namespaceURI, 'rect')
+   Object.entries({
+     x: 100,
+     y: 70,
+     width: 120,
+     height: 80,
+     fill: "#95B3D7",
+   }).forEach(([key, val]) => rect.setAttribute(key, String(val)));
+   svg.appendChild(rect);
+ 
+   interval(1).pipe(takeUntil(interval(1000)))
+               .subscribe(() => rect.setAttribute('x', String(1 + Number(rect.getAttribute('x')))))
 }
 
 // Exercise 7
@@ -198,7 +210,52 @@ function keyboardControl() {
 
   // Your code starts here!
   // =========================================================================================
-  // ...
+  const rect = document.createElementNS(svg.namespaceURI,'rect');
+   Object.entries({
+     x: 250, 
+     y: 260,
+     width: 100, 
+     height: 80,
+     fill: '#95B3D7',
+   }).forEach(([key, val])=>rect.setAttribute(key, String(val)))
+   svg.appendChild(rect);
+ 
+   // keystrokes
+   const SPEED = 5;
+   const wKey = fromEvent<KeyboardEvent>(document,"keydown")
+                 .pipe(
+                   filter((e:KeyboardEvent) => e.key === 'w' || e.key === "ArrowUp"),
+                   map(_ =>
+                     (obj:Element) => 
+                       obj.setAttribute('y', String(Number(obj.getAttribute('y')) - SPEED))
+                   )
+                 )
+   const sKey = fromEvent<KeyboardEvent>(document,"keydown")
+                 .pipe(
+                   filter((e:KeyboardEvent) => e.key === 's' || e.key === "ArrowDown"),
+                   map(_ =>
+                     (obj:Element) => 
+                       obj.setAttribute('y', String(Number(obj.getAttribute('y')) + SPEED))
+                   )
+                 )
+   const aKey = fromEvent<KeyboardEvent>(document,"keydown")
+                 .pipe(
+                   filter((e:KeyboardEvent) => e.key === 'a' || e.key === "ArrowLeft"),
+                   map(_ =>
+                     (obj:Element) => 
+                       obj.setAttribute('x', String(Number(obj.getAttribute('x')) - SPEED))
+                   )
+                 )
+   const dKey = fromEvent<KeyboardEvent>(document,"keydown")
+                 .pipe(
+                   filter((e:KeyboardEvent) => e.key === 'd' || e.key === "ArrowRight"),
+                   map(_ =>
+                     (obj:Element) => 
+                       obj.setAttribute('x', String(Number(obj.getAttribute('x')) + SPEED))
+                   )
+                 )
+   
+   merge(wKey, sKey, aKey, dKey).subscribe((f) => f(rect));
 }
 
 // Running the code
@@ -212,8 +269,8 @@ document.addEventListener("DOMContentLoaded", function (event) {
   //mousePosEvents();
   mousePosObservable();
 
-  animatedRectTimer();
+//   animatedRectTimer();
   // replace the above call with the following once you have implemented it:
-  //animatedRect()
+  animatedRect()
   keyboardControl();
 });
