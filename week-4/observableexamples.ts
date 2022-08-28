@@ -17,8 +17,8 @@
  * browser window to run the test.
  */
 
-import { interval, fromEvent } from "rxjs";
-import { map, filter } from "rxjs/operators";
+import { interval, fromEvent, merge, zip } from "rxjs";
+import { map, filter, takeUntil, scan } from "rxjs/operators";
 
 // Simple demonstration
 // ===========================================================================================
@@ -76,20 +76,19 @@ function piApproximation() {
   // a simple, seedable, pseudo-random number generator
   class RNG {
     // LCG using GCC's constants
-    m = 0x80000000; // 2**31
-    a = 1103515245;
-    c = 12345;
-    state: number;
-    constructor(seed: number) {
-      this.state = seed ? seed : Math.floor(Math.random() * (this.m - 1));
+    readonly m = 0x80000000; // 2**31
+    readonly a = 1103515245;
+    readonly c = 12345;
+    constructor(readonly state: number) {}
+    int() {
+      return (this.a * this.state + this.c) % this.m;
     }
-    nextInt() {
-      this.state = (this.a * this.state + this.c) % this.m;
-      return this.state;
-    }
-    nextFloat() {
+    float() {
       // returns in range [0,1]
-      return this.nextInt() / (this.m - 1);
+      return this.int() / (this.m - 1);
+    }
+    next() {
+      return new RNG(this.int());
     }
   }
 
@@ -103,44 +102,62 @@ function piApproximation() {
 
   // Some handy types for passing data around
   type Colour = "red" | "green";
-  type Dot = { x: number; y: number; colour?: Colour };
+  type Point = {x: number, y: number}
+  type Dot = { centre: Point; colour: Colour };
   interface Data {
-    point?: Dot;
     insideCount: number;
-    totalCount: number;
+    outsideCount: number;
   }
 
   // an instance of the Random Number Generator with a specific seed
   const rng = new RNG(20);
   // return a random number in the range [-1,1]
-  const nextRandom = () => rng.nextFloat() * 2 - 1;
+  const nextRandom = () => rng.float() * 2 - 1;
   // you'll need the circleDiameter to scale the dots to fit the canvas
   const circleRadius = Number(canvas.getAttribute("width")) / 2;
   // test if a point is inside a unit circle
-  const inCircle = ({ x, y }: Dot) => x * x + y * y <= 1;
+  const inCircle = ({ x, y }: Point) => x * x + y * y <= 1;
   // you'll also need to set innerText with the pi approximation
   resultInPage.innerText =
     "...Update this text to show the Pi approximation...";
 
   // Your code starts here!
   // =========================================================================================
-  function createDot(/* what parameters do we need to plot dots at different locations and in red or green? Use the types above! */) {
+  function createDot(d: Dot) {
     if (!canvas) throw "Couldn't get canvas element!";
     const dot = document.createElementNS(canvas.namespaceURI, "circle");
-    const x = 50,
-      y = 50; // all points are at 50,50!
     // Set circle properties
-    dot.setAttribute("cx", String(x));
-    dot.setAttribute("cy", String(y));
+    dot.setAttribute("cx", String(d.centre.x));
+    dot.setAttribute("cy", String(d.centre.y));
     dot.setAttribute("r", "5");
-    dot.setAttribute("fill", "red"); // All points red
-
+    dot.setAttribute("fill", d.colour);
     // Add the dot to the canvas
     canvas.appendChild(dot);
   }
 
   // A stream of random numbers
-  const randomNumberStream = interval(50).pipe(map(nextRandom));
+  const randomNumberStream = (seed: number) => interval(50).pipe(
+    scan((r, _) => r.next(), new RNG(seed)),
+    map(r => 1-2*r.float())
+  ),
+  scale = (v: number) => (v+1)*circleRadius,
+  scalePoint = (p: Point) => <Point>{x: scale(p.x), y: scale(p.y)},
+  not = (f: Function) => (v: Point) => !f(v),
+  makeDots = (pred: Function, colour: Colour) => point$.pipe(filter(pred), map(scalePoint), map(p=><Dot>{centre: p, colour: colour}))
+  const point$ = 
+    zip(randomNumberStream(1), randomNumberStream(2))
+      .pipe(map(([x, y]) => <Point>{x,y})),
+    inside$ = makeDots(inCircle, "green"),
+    outside$ = makeDots(not(inCircle), "red"),
+    dot$ = merge(inside$, outside$)
+  const pi$ = dot$.pipe(
+    scan<Dot, Data>(({insideCount, outsideCount}, d) =>
+      d.colour === 'green' ? {insideCount: insideCount+1, outsideCount} : {insideCount, outsideCount: outsideCount+1},
+      {insideCount: 0, outsideCount: 0}),
+    map(({insideCount, outsideCount}) => 4 * insideCount / (insideCount + outsideCount))
+  )
+  dot$.subscribe(createDot)
+  pi$.subscribe(pi => resultInPage.innerText = String(pi))
 }
 
 // Exercise 6
