@@ -143,7 +143,7 @@ function piApproximation() {
   scale = (v: number) => (v+1)*circleRadius,
   scalePoint = (p: Point) => <Point>{x: scale(p.x), y: scale(p.y)},
   not = (f: Function) => (v: Point) => !f(v),
-  makeDots = (pred: Function, colour: Colour) => point$.pipe(filter(pred), map(scalePoint), map(p=><Dot>{centre: p, colour: colour}))
+  makeDots = (pred: any, colour: Colour) => point$.pipe(filter(pred), map(scalePoint), map(p=><Dot>{centre: p, colour: colour}))
   const point$ = 
     zip(randomNumberStream(1), randomNumberStream(2))
       .pipe(map(([x, y]) => <Point>{x,y})),
