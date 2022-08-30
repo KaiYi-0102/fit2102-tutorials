@@ -22,7 +22,8 @@ data BinTree = Leaf | Label Int BinTree BinTree
 -- >>> depth tree
 -- 3
 depth :: BinTree -> Int
-depth = undefined
+depth Leaf = 0
+depth (Label value left right) = 1 + max (depth left) (depth right) 
 
 -- | Find the number of nodes in a tree.
 --
@@ -35,7 +36,8 @@ depth = undefined
 -- >>> size tree
 -- 4
 size :: BinTree -> Int
-size = undefined
+size Leaf = 0 
+size (Label value left right) = 1 + size left + size right 
 
 -- | Sum the elements of a numeric tree.
 --
@@ -50,7 +52,8 @@ size = undefined
 --
 -- prop> sumTree (Label v Leaf Leaf) == v
 sumTree :: BinTree -> Int
-sumTree = undefined
+sumTree Leaf = 0
+sumTree (Label value left right) = sumTree left + sumTree right + value 
 
 -- | Find the minimum element in a tree.
 --
@@ -63,7 +66,8 @@ sumTree = undefined
 -- 16
 --
 minTree :: BinTree -> Int
-minTree = undefined
+minTree Leaf = maxBound::Int
+minTree (Label value left right) = if value >(min (minTree left) (minTree right)) then (min (minTree left) (minTree right)) else value
 
 -- | Map a function over a tree.
 --
@@ -76,4 +80,5 @@ minTree = undefined
 -- >>> mapTree ((flip mod) 2) tree
 -- Label 0 (Label 1 Leaf (Label 1 Leaf Leaf)) (Label 0 Leaf Leaf)
 mapTree :: (Int -> Int) -> BinTree -> BinTree
-mapTree = undefined
+mapTree f Leaf = Leaf
+mapTree f (Label value left right)= Label (f value) (mapTree f left) (mapTree f right)
