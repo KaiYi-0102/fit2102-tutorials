@@ -12,7 +12,7 @@ import Prelude
 -- >>> eulerProblem1 1000
 -- 233168
 eulerProblem1 :: Int -> Int
-eulerProblem1 n = undefined
+eulerProblem1 n = sum $ filter (\x -> (mod x 3 == 0 || mod x 5 == 0)) [1..n-1]
 
 -- | Function to check if every element in a list is even.
 -- Avoid hard coding recursion in these functions, if you do, you will lose marks!
