@@ -37,7 +37,7 @@ data IntPair = IntPair Int Int
 -- >>> plusIntPair p2
 -- 8
 plusIntPair :: IntPair -> Int
-plusIntPair (IntPair a b)= a + b 
+plusIntPair (IntPair a b) = a + b 
 
 -- | Subtract the two elements of a pair.
 --
