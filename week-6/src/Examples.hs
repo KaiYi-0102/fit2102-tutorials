@@ -32,7 +32,7 @@ allEvens l = all even l
 -- >>> anyOdd [0,0,0,4]
 -- False
 anyOdd :: [Int] -> Bool
-anyOdd l = all odd l
+anyOdd l = any odd l
 
 -- | Function to sum every element in two lists
 -- Avoid hard coding recursion in these functions, if you do, you will lose marks!
