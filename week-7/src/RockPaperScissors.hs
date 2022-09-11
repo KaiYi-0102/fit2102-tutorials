@@ -26,28 +26,38 @@ type Plays = [RockPaperScissors] -- This type alias is used to make our inputs m
 -- >>> map show rps
 -- ["R","P","S"]
 instance Show RockPaperScissors where
-  show = error "show not implemented"
+  show Rock = "R"
+  show Paper = "P"
+  show Scissors = "S"
 
 -- | Equality between members.
 --
 -- >>> insight (==) combinations
 -- [True,False,False,False,True,False,False,False,True]
 instance Eq RockPaperScissors where
-  _ == _ = error "eq not implemented"
+  Rock     == Rock     = True
+  Scissors == Scissors = True
+  Paper    == Paper    = True
+  _        == _        = False
 
 -- | Ordering to determine winning moves.
 --
 -- >>> insight compare combinations
 -- [EQ,LT,GT,GT,EQ,LT,LT,GT,EQ]
 instance Ord RockPaperScissors where
-  compare _ _ = error "ord not implemented"
+  compare Rock Paper     = LT
+  compare Paper Scissors = LT
+  compare Scissors Rock  = LT
+  compare a b 
+    | b == a = EQ
+    | otherwise = GT 
 
 -- | Tell which player won.
 --
 -- >>> insight whoWon combinations
 -- [Draw,Player2,Player1,Player1,Draw,Player2,Player2,Player1,Draw]
 whoWon :: RockPaperScissors -> RockPaperScissors -> Result
-whoWon = error "whoWon not implemented"
+whoWon a b = if a==b then Draw else if a > b then Player1 else Player2
 
 -- | Counts number of times a Result occurred in a series of Plays.
 --
@@ -60,7 +70,8 @@ whoWon = error "whoWon not implemented"
 -- >>> countResult [Rock, Paper, Paper, Scissors] [Rock, Scissors, Rock, Paper] Draw
 -- 1
 countResult :: Plays -> Plays -> Result -> Int
-countResult = error "countResult not implemented"
+countResult [] [] result = 0
+countResult (a:arest)   (b:brest) result = if whoWon a b == result then countResult arest brest result+1 else countResult arest brest result 
 
 -- | Calculates result of a series of Plays
 --
@@ -81,4 +92,7 @@ countResult = error "countResult not implemented"
 -- >>> competition [Scissors, Scissors, Scissors, Scissors, Scissors, Scissors] [Rock, Rock, Rock, Rock, Paper, Paper]
 -- Player2
 competition :: Plays -> Plays -> Result
-competition = error "competition not implemented"
+competition a b 
+  | countResult a b Player1 == countResult a b Player2 = Draw
+  | countResult a b Player1 > countResult a b Player2 = Player1
+  | otherwise  = Player2
