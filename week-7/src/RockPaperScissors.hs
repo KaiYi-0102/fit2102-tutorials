@@ -71,7 +71,7 @@ whoWon a b = if a==b then Draw else if a > b then Player1 else Player2
 -- 1
 countResult :: Plays -> Plays -> Result -> Int
 countResult [] [] result = 0
-countResult (a:arest)   (b:brest) result = if whoWon a b == result then countResult arest brest result+1 else countResult arest brest result 
+countResult (a:arest) (b:brest) result = if whoWon a b == result then countResult arest brest result + 1 else countResult arest brest result 
 
 -- | Calculates result of a series of Plays
 --
