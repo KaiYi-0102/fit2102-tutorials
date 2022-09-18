@@ -31,7 +31,8 @@ infixl 4 <$>
 -- Id 3
 instance Functor Id where
     (<$>) :: (a -> b) -> Id a -> Id b
-    (<$>) = error "fmap id not implemented"
+    -- taking the value, Id(f a)
+    (<$>) f (Id a) = Id(f a)
 
 -- | Map a function on the 'Pair' functor.
 --
@@ -42,7 +43,7 @@ instance Functor Id where
 -- Pair 10 14
 instance Functor Pair where
     (<$>) :: (a -> b) -> Pair a -> Pair b
-    (<$>) = error "fmap pair not implemented"
+    (<$>) f (Pair a b) = Pair (f a) (f b)
 
 -- | Map a function on the list functor.
 --
@@ -55,7 +56,7 @@ instance Functor Pair where
 -- [2,3,4]
 instance Functor [] where
     (<$>) :: (a -> b) -> [a] -> [b]
-    (<$>) = error "fmap list not implemented"
+    (<$>) = map
 
 -- | Map a function on the 'Maybe' functor.
 --
@@ -66,7 +67,8 @@ instance Functor [] where
 -- Just 3
 instance Functor Maybe where
     (<$>) :: (a -> b) -> Maybe a -> Maybe b
-    (<$>) = error "fmap maybe not implemented"
+    (<$>) _ Nothing = Nothing
+    (<$>) f (Just x) = Just (f x)
 
 -- | Instance of Functor for a function that takes type r as input
 --
@@ -77,7 +79,8 @@ instance Functor Maybe where
 -- 7
 instance Functor ((->)r) where
     (<$>) :: (b -> c) -> (r -> b) -> (r -> c)
-    (<$>) = error "fmap function not implemented"
+    -- (<$>) f g = f.g
+    (<$>) = (.)
 
 -- | Instance of Functor for a tuple that takes type a as input
 --
@@ -93,7 +96,7 @@ instance Functor ((->)r) where
 -- (1,2,3,4)
 instance Functor ((,) a) where
     (<$>) :: (b -> c) -> (a, b) -> (a, c)
-    (<$>) = error "fmap tuple not implemented"
+    (<$>) f (a , b) = (a , f b)
 
 -- | Map a function over a Functor of Functors
 --
@@ -114,7 +117,12 @@ instance Functor ((,) a) where
 -- >>> nestedMap (+1) (Just Nothing)
 -- Just Nothing
 nestedMap :: (Functor f, Functor g) => (a -> b) -> f (g a) -> f (g b)
-nestedMap = error "nestedMap not implemented"
+-- nestedMap f c = (f <$>) <$> c
+-- nestedMap f c = <$> (f <$>) c   -- operator sectioning
+-- nestedMap f = (<$>) (f <$>)     -- eta conversion
+-- nestedMap f = (<$>) (<$> f)     -- operator sectioning
+-- nestedMap f = ((<$>).(<$>)) f   -- compose
+nestedMap = (<$>).(<$>)         -- eta conversion
 
 {-
     ******************** Supplementary **************************
