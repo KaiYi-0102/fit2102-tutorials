@@ -23,10 +23,10 @@ infixl 4 <*>
 -- Id 18
 instance Applicative Id where
     pure :: a -> Id a
-    pure = error "pure id not implemented"
+    pure = Id 
 
     (<*>) :: Id (a -> b) -> Id a -> Id b
-    (<*>) = error "apply id not implemented"
+    (Id a) <*> (Id b) = Id (a b)
 
 -- | Apply to a Maybe, must return `Nothing` if either the function or the
 -- element is a `Nothing`.
@@ -41,10 +41,12 @@ instance Applicative Id where
 -- Nothing
 instance Applicative Maybe where
     pure :: a -> Maybe a
-    pure = error "pure maybe not implemented"
+    pure = Just
 
     (<*>) :: Maybe (a -> b) -> Maybe a -> Maybe b
-    (<*>) = error "apply maybe not implemented"
+    Nothing <*> _  = Nothing
+    _ <*> Nothing = Nothing
+    (Just f) <*> (Just g) = Just (f g)
 
 -- | Apply a list of functions over a list of elements, producing the
 -- concatenation of the successive results.
@@ -54,14 +56,16 @@ instance Applicative Maybe where
 -- [2,3,4,10,20,30]
 instance Applicative [] where
     pure :: a -> [a]
-    pure = error "pure list not implemented"
+    pure a = [a]
 
     -- /Hint/: You can implement this using
     --      - list comprehension, or
     --      - foldr and map, or
     --      - map and recursion
+
+    -- https://wiki.haskell.org/List_comprehension i refered to here
     (<*>) :: [a -> b] -> [a] -> [b]
-    (<*>) = error "apply list not implemented"
+    a <*> b = [f x | f <- a, x <- b]
 
 -- | The 'Applicative' class derives from 'Functor', rewrite `fmap` using only
 -- `pure` and `<*>`.
@@ -78,7 +82,7 @@ instance Applicative [] where
 -- >>> (+1) `fmap` [1, 2, 3]
 -- [2,3,4]
 fmap :: Applicative f => (a -> b) -> f a -> f b
-fmap = error "fmap not implemented"
+fmap f x = pure f <*> x
 
 {-
     ******************** Supplementary **************************8
@@ -109,11 +113,11 @@ fmap = error "fmap not implemented"
 instance Applicative ((->) r) where
     pure :: a -> (r -> a)
     -- pure :: a -> r -> a
-    pure = error "pure function not implemented"
+    pure a = \x -> a -- return a lambda function or we can do this (= f where f _ = a)
 
     (<*>) :: (r -> (a -> b)) -> (r -> a) -> (r -> b)
     -- (<*>) :: (r -> (a -> b)) -> (r -> a) -> r -> b
-    (<*>) = error "apply function not implemented"
+    a <*> b = f where f x = (a x) (b x) -- the idea is to apply a to x and b to x, then apply the function produced by a to x to value produced by b to x
 
 -- | Takes an of functions in an Applicative context, and a value in the same context
 --   and applies the functions to the value
@@ -124,7 +128,7 @@ instance Applicative ((->) r) where
 -- >>> nestedApply [Id (++" hello"),Id (++" world!")] (Id "hello")
 -- [Id "hello hello",Id "hello world!"]
 nestedApply :: (Applicative f, Applicative g) => g (f (a -> b)) -> f a -> g (f b)
-nestedApply = error "nestedApply not implemented"
+nestedApply a b = (<*>) <$> a <*> pure b -- idea is,lift the <*> function over the applicative a, then now we can apply the function to the applicative b as usual
 
 -- | Apply to a RoseTree, i.e. return a tree composed of trees created by the
 -- successive application of functions to initial nodes.
