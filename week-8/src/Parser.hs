@@ -129,4 +129,4 @@ open c = Parser $ \i -> case parse char i of
 -- >>> parse parseIntTuple2 "[10,2)"
 -- Nothing
 parseIntTuple2 :: Parser (Int, Int)
-parseIntTuple2 = error "parseIntTuple2 not implemented"
+parseIntTuple2 = (,) <$> (open '(') <*> item
