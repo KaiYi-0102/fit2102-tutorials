@@ -102,7 +102,7 @@ is c = Parser $ \i -> case parse char i of
 -- >>> parse item "1"
 -- Nothing
 item :: Parser Int
-item = error "item not implemented"
+item = (is ',' *> int) 
 
 -- | Parse an inital character and an integer
 --
@@ -115,7 +115,9 @@ item = error "item not implemented"
 -- >>> parse (open '[') "{1,2,3}"
 -- Nothing
 open :: Char -> Parser Int
-open = error "open not implemented"
+open c = Parser $ \i -> case parse char i of
+    Just (ic, x) -> if x == c then parse int ic else Nothing
+    Nothing      -> Nothing
 
 -- | Parse a tuple with two integers
 --
