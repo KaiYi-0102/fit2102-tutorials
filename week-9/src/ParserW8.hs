@@ -1,10 +1,10 @@
 {-# LANGUAGE NoImplicitPrelude #-}
-module Parser where
+module ParserW8 where
 
 import           Base
 import           Functor
 import           Applicative
-import           Exercises
+import           ExercisesW8
 
 import           Prelude                        ( reads )
 
@@ -102,7 +102,7 @@ is c = Parser $ \i -> case parse char i of
 -- >>> parse item "1"
 -- Nothing
 item :: Parser Int
-item = is ',' *> int 
+item = is ',' *> int
 
 -- | Parse an inital character and an integer
 --
@@ -115,13 +115,10 @@ item = is ',' *> int
 -- >>> parse (open '[') "{1,2,3}"
 -- Nothing
 open :: Char -> Parser Int
-open c = Parser $ \i -> case parse char i of
-    Just (ic, x) -> if x == c then parse int ic else Nothing
-    Nothing      -> Nothing
+open c = is c *> int
 
 -- | Parse a tuple with two integers
---
--- /Hint/ Use open, item, and a variant of lift
+-- /Hint/ Use open, item, and a variant of Lift
 --
 -- >>> parse parseIntTuple2 "(10,2)"
 -- Just ("",(10,2))
@@ -129,4 +126,4 @@ open c = Parser $ \i -> case parse char i of
 -- >>> parse parseIntTuple2 "[10,2)"
 -- Nothing
 parseIntTuple2 :: Parser (Int, Int)
-parseIntTuple2 = (,) <$> (open '(') <*> item
+parseIntTuple2 = liftA2 (,) (open '(') (item <* is ')')
