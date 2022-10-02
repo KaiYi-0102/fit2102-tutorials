@@ -51,7 +51,7 @@ class (Functor t, Foldable t) => Traversable t where
 -- 3628800
 instance Foldable [] where
     foldMap :: (Monoid m) => (a -> m) -> [a] -> m
-    foldMap = error "Foldable list not implemented"
+    foldMap f x = foldr (\y -> mappend (f y)) mempty x
 
 -- | Traverse a list while producing an effect.
 --
@@ -80,7 +80,7 @@ instance Traversable [] where
 -- 5
 instance Foldable Maybe where
     foldMap :: (Monoid m) => (a -> m) -> Maybe a -> m
-    foldMap = error "foldable maybe not implemented"
+    foldMap f x = foldr (\y -> mappend (f y)) mempty x
 
 -- | Traverse a Maybe
 --
@@ -108,9 +108,9 @@ instance Traversable Maybe where
 -- 168
 --
 -- /Hint/: use the Monoid's 'mempty', 'mappend' and 'mconcat'.
-instance Foldable RoseTree where
-    foldMap :: (Monoid m) => (a -> m) -> RoseTree a -> m
-    foldMap = error "foldable rosetree not implemented"
+-- instance Foldable RoseTree where
+--     foldMap :: (Monoid m) => (a -> m) -> RoseTree a -> m
+--     foldMap = error "foldable rosetree not implemented"
 
 
 -- | Traverse a 'RoseTree' while producing an effect.
@@ -134,6 +134,6 @@ instance Foldable RoseTree where
 -- Note: if even after reading all the hints and spoilers you are still
 -- completely mystified then write down questions for your tutor and your best
 -- approximation in English of what you think needs to happen in English.
-instance Traversable RoseTree where
-    traverse :: Applicative f => (a -> f b) -> RoseTree a -> f (RoseTree b)
-    traverse = error "traversable rosetree not implemented"
+-- instance Traversable RoseTree where
+--     traverse :: Applicative f => (a -> f b) -> RoseTree a -> f (RoseTree b)
+--     traverse = error "traversable rosetree not implemented"
