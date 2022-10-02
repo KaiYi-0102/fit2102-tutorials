@@ -52,6 +52,8 @@ class (Functor t, Foldable t) => Traversable t where
 instance Foldable [] where
     foldMap :: (Monoid m) => (a -> m) -> [a] -> m
     foldMap f x = foldr (\y -> mappend (f y)) mempty x
+--     foldMap _ [] = mempty
+--     foldMap f (x:xs) = f x <> foldMap f xs 
 
 -- | Traverse a list while producing an effect.
 --
@@ -67,7 +69,7 @@ instance Foldable [] where
 -- Nothing
 instance Traversable [] where
     traverse :: Applicative f => (a -> f b) -> [a] -> f [b]
-    traverse = error "traversable list not implemented"
+    traverse f a = sequence (f <$> a)
 
 -- | Write instance for Maybe as a foldable.
 --
@@ -81,6 +83,8 @@ instance Traversable [] where
 instance Foldable Maybe where
     foldMap :: (Monoid m) => (a -> m) -> Maybe a -> m
     foldMap f x = foldr (\y -> mappend (f y)) mempty x
+--     foldMap _ Nothing = mempty
+--     foldMap f (Just a) = f a
 
 -- | Traverse a Maybe
 --
@@ -92,7 +96,8 @@ instance Foldable Maybe where
 --
 instance Traversable Maybe where
     traverse :: Applicative f => (a -> f b) -> Maybe a -> f (Maybe b)
-    traverse = error "traversable maybe not implemented"
+    traverse _ Nothing = pure Nothing
+    traverse f (Just a) = Just <$> f a
 
 {-
     ******************** Supplementary **************************
