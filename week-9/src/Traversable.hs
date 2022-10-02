@@ -51,9 +51,8 @@ class (Functor t, Foldable t) => Traversable t where
 -- 3628800
 instance Foldable [] where
     foldMap :: (Monoid m) => (a -> m) -> [a] -> m
-    foldMap f x = foldr (\y -> mappend (f y)) mempty x
---     foldMap _ [] = mempty
---     foldMap f (x:xs) = f x <> foldMap f xs 
+    foldMap _ [] = mempty
+    foldMap f (x:xs) = f x <> foldMap f xs 
 
 -- | Traverse a list while producing an effect.
 --
@@ -82,9 +81,8 @@ instance Traversable [] where
 -- 5
 instance Foldable Maybe where
     foldMap :: (Monoid m) => (a -> m) -> Maybe a -> m
-    foldMap f x = foldr (\y -> mappend (f y)) mempty x
---     foldMap _ Nothing = mempty
---     foldMap f (Just a) = f a
+    foldMap _ Nothing = mempty
+    foldMap f (Just a) = f a
 
 -- | Traverse a Maybe
 --
