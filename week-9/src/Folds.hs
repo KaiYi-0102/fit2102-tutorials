@@ -23,7 +23,7 @@ import           Base hiding ((++))
 -- >>> all [False, True, True]
 -- False
 all :: [Bool] -> Bool
-all = error "all not implemented"
+all = foldr (\i -> (&&) $ i==True) True
 
 -- | Rewrite 'any' using 'foldr'.
 -- | Must write point-free and without lambda functions.
@@ -33,7 +33,7 @@ all = error "all not implemented"
 -- >>> any [False, True, False]
 -- True
 any :: [Bool] -> Bool
-any = error "any not implemented"
+any = foldr (\i -> (||) $ i==True) True
 
 -- | Rewrite 'sum' using 'foldr'.
 -- | Must write point-free and without lambda functions.
@@ -45,7 +45,7 @@ any = error "any not implemented"
 --
 -- prop> \x -> foldl (-) (sum x) x == 0
 sum :: Num a => [a] -> a
-sum = error "sum not implemented"
+sum l = foldr (\i a -> i + a) 0 l
 
 -- | Rewrite 'product' using 'foldr'.
 -- | Must write point-free and without lambda functions.
@@ -55,7 +55,7 @@ sum = error "sum not implemented"
 -- >>> product [1..10]
 -- 3628800
 product :: Num a => [a] -> a
-product = error "product not implemented"
+product l = foldr (\i a -> i * a) 0 l
 
 -- | Rewrite 'length' using 'foldr'.
 -- | Must write point-free and without lambda functions.
@@ -67,7 +67,7 @@ product = error "product not implemented"
 --
 -- prop> sum (map (const 1) x) == length x
 length :: [a] -> Int
-length = error "length not implemented"
+length = foldr (\i -> (+) 1) 0  
 
 -- | Rewrite /append/ '(++)' using 'foldr'.
 -- | Must write this in point-free notation and without lambda functions
@@ -85,8 +85,10 @@ length = error "length not implemented"
 --
 -- Associativity of append.
 -- prop> (x ++ y) ++ z == x ++ (y ++ z)
+
 (++) :: [a] -> [a] -> [a]
-(++) = error "++ not implemented"
+-- foldr (:) [4,5,6] [1,2,3]
+(++) = flip (foldr (:))  
 
 -- | Flatten a (once) nested list.
 -- | Must write point-free and without lambda functions.
@@ -98,4 +100,4 @@ length = error "length not implemented"
 --
 -- prop> sum (map length x) == length (flatten x)
 flatten :: [[a]] -> [a]
-flatten = error "flatten not implemented"
+flatten i = foldr (++) [] i
