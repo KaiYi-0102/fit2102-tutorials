@@ -30,7 +30,7 @@ infixr 1 =<<
 -- [1,1,2,2,3,3]
 instance Monad [] where
   (=<<) :: (a -> [b]) -> [a] -> [b]
-  (=<<) = error "monad list not implemented"
+  (=<<) f l = mconcat (f <$> l)
 
 -- | Bind a function on a 'Maybe'.
 -- /Hint/: Use pattern matching to handle the Nothing and the Just cases.
@@ -43,7 +43,7 @@ instance Monad [] where
 -- Nothing
 instance Monad Maybe where
   (=<<) :: (a -> Maybe b) -> Maybe a -> Maybe b
-  (=<<) = error "monad maybe not implemented"
+  (=<<) f (Just a)  = f a 
 
 -- | ------------------------------------------------------
 -- | -------------------- Supplementary -------------------
