@@ -43,6 +43,7 @@ instance Monad [] where
 -- Nothing
 instance Monad Maybe where
   (=<<) :: (a -> Maybe b) -> Maybe a -> Maybe b
+  (=<<) f Nothing = Nothing
   (=<<) f (Just a)  = f a 
 
 -- | ------------------------------------------------------
@@ -80,4 +81,4 @@ instance Monad Maybe where
 -- [2,3,4,1,2,3]
 instance Monad ((->) r) where
   (=<<) :: (a -> (r -> b)) -> (r -> a) -> (r -> b)
-  (=<<) = error "monad function not implemented"
+  (=<<) f g = \x -> f (g x) x
