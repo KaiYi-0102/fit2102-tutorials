@@ -66,7 +66,7 @@ join x = id =<< x
 
 -- | 'return' is just 'pure', which is available because a Monad is also an Applicative
 return :: (Monad m) => a -> m a
-return x = return x
+return x = pure x
 
 -- | map a function with a monadic effect across a Traversable.
 --
