@@ -439,7 +439,17 @@ stringTok = error "stringTok not implemented"
 -- >>> isErrorResult (parse (sepby1 char (is ',')) "")
 -- True
 sepby1 :: Parser a -> Parser s -> Parser [a]
-sepby1 = error "sepby1 not implemented"
+sepby1 p s = do
+  a <- p
+  --repeat this part with list
+  b <- list (sepby1Help p s)
+  pure (a:b)
+
+sepby1Help :: Parser a -> Parser s -> Parser a
+sepby1Help p s = do 
+  _ <- s
+  a <- p
+  pure a
 
 -- | Write a function that produces a list of values from repeating the given
 -- parser, separated by the second given parser.
@@ -458,7 +468,7 @@ sepby1 = error "sepby1 not implemented"
 -- >>> parse (sepby char (is ',')) "a,b,c,,def"
 -- Result >def< "abc,"
 sepby :: Parser a -> Parser s -> Parser [a]
-sepby = error "sepby not implemented"
+sepby p s = sepby1 p s ||| pure []
 
 -- | Write a function that produces a parser for an array (list)
 --
@@ -488,4 +498,10 @@ sepby = error "sepby not implemented"
 -- >>> isErrorResult (parse (array $ tok int) "1")
 -- True
 array :: Parser a -> Parser [a]
-array = error "array not implemented"
+array p = do
+  a <- is '['
+  spaces
+  b <- (sepby p (is ','))
+  spaces
+  c <- is ']'
+  pure b
