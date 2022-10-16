@@ -272,7 +272,7 @@ alpha = error "alpha not implemented"
 -- >>> parse (list (char *> pure 'v')) ""
 -- Result >< ""
 list :: Parser a -> Parser [a]
-list = error "list not implemented"
+list p = list1 p ||| pure [] 
 
 -- | Return a parser that produces at least one value from the given parser
 -- then continues producing a list of values from the given parser (to
@@ -289,7 +289,12 @@ list = error "list not implemented"
 -- >>> isErrorResult (parse (list1 (char *> pure 'v')) "")
 -- True
 list1 :: Parser a -> Parser [a]
-list1 = error "list1 not implemented"
+list1 p = do
+  first <- p
+  rest <- list P
+  pure (first:rest)
+
+
 
 -- | Write a parser that will parse zero or more spaces.
 --
@@ -301,7 +306,7 @@ list1 = error "list1 not implemented"
 -- >>> parse spaces "abc"
 -- Result >abc< ""
 spaces :: Parser String
-spaces = error "spaces not implemented"
+spaces = list space
 
 -- | Return a parser that produces one or more space characters (consuming
 -- until the first non-space) but fails if:
@@ -318,7 +323,7 @@ spaces = error "spaces not implemented"
 -- >>> isErrorResult $ parse spaces1 "abc"
 -- True
 spaces1 :: Parser String
-spaces1 = error "spaces1 not implemented"
+spaces1 = list1 space
 
 -- | Return a parser that produces the given number of values off the given
 -- parser.  This parser fails if the given parser fails in the attempt to
